@@ -1,0 +1,17 @@
+import requests
+import pysolr
+import json
+
+solr_url = "http://localhost:8983/solr/madhu"
+
+data_url = "https://api.patentsview.org/patents/query?q={%22_gte%22:{%22patent_date%22:%222007-01-04%22}}&f=[%22patent_number%22,%22patent_date%22,%22patent_title%22]"
+
+solr = pysolr.Solr(solr_url, timeout=10)
+
+response = requests.get(data_url)
+
+documents = response.json()
+data=documents['patents']
+
+solr.add(data)
+solr.commit()
